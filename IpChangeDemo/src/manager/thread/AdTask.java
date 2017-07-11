@@ -210,6 +210,7 @@ public class AdTask implements Runnable {
 					isUseNew = false;
 				}
 			}else {
+				
 				Constance.oldProxyIpBeanList.remove(ipBean);
 				Constance.ipDeviceInfoMap.remove(ipBean.ip);
 			}
