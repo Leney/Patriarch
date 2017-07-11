@@ -482,11 +482,19 @@ public class NetUtil {
 				result += line;
 			}
 			result = new String(result.getBytes(), "utf-8");
-			// TODO 解析获取当前ip的结果 判断是否设置代理成功
-
+			
+			JSONObject object = new JSONObject(result);
+			String ip = object.getString("ip");
+			if(TextUtils.equals(ip, ipBean.ip)) {
+				// 是有效的额代理ip
+				isValia = true;
+			}else {
+				// 无效的代理ip
+				isValia = false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = "";
+			isValia = false;
 		} finally {
 			urlConnection.disconnect();
 			try {

@@ -49,5 +49,14 @@ public class Main {
 				
 			}
 		}).start();
+		
+		
+//		ProxyIpBean ipBean = new ProxyIpBean();
+//		ipBean.ip = "sdsdf:1652:4545:255";
+//		Constance.newProxyIpBeanList.add(ipBean);
+//		Constance.oldProxyIpBeanList.add(Constance.newProxyIpBeanList.getFirst());
+//		Constance.newProxyIpBeanList.remove(ipBean);
+//		System.out.println("new----->>>"+Constance.newProxyIpBeanList.isEmpty());
+//		System.out.println("old_ip----->>>"+Constance.oldProxyIpBeanList.getFirst().ip);
 	}
 }

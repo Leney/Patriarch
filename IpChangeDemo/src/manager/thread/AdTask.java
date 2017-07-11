@@ -54,6 +54,11 @@ public class AdTask implements Runnable {
 	 * 讯飞后台应用对应的包名
 	 */
 	private String packageName;
+	
+	/**
+	 * 标识当前是否是使用的新的集合中的ip信息
+	 */
+	private boolean isUseNew = true;
 
 	public AdTask(String[] adUnitIds, int[][] adWidthAndHeight, String appId, String appName, String packageName) {
 		// this.deviceInfo = deviceInfo;
@@ -64,15 +69,163 @@ public class AdTask implements Runnable {
 		this.packageName = packageName;
 		// this.threadNum = threadNum;
 	}
+	
+	private void init() {
+		// 标识是否是使用新的集合中的ip信息
+		if(Constance.newProxyIpBeanList.isEmpty()) {
+			// 如果集合中为空，则表明新的ip已经用完
+			if(Constance.oldProxyIpBeanList.size()>1000) {
+				// 如果有效的集合中，已经满了1000条了，则再次使用之前保存的有效的ip信息
+				this.ipBean = Constance.oldProxyIpBeanList.getFirst();
+				isUseNew = true;
+			}else {
+				// 如果有效的集合中，还未装满1000条数据，则到芝麻代理中获取新的一波ip信息
+				Tools.getProxyIpList();
+				if(Constance.newProxyIpBeanList.isEmpty()) {
+					// 从芝麻后台获取不到ip信息了
+					// 重新再走一遍流程
+					init();
+					return;
+				}
+				this.ipBean = Constance.newProxyIpBeanList.getFirst();
+				isUseNew = false;
+			}
+		}else {
+			// 新的ip集合中还有数据
+			this.ipBean = Constance.newProxyIpBeanList.getFirst();
+			isUseNew = true;
+		}
+		
+		if(this.ipBean == null) {
+			init();
+			return;
+		}
+		
+		
+		if(isUseNew) {
+			// 只有在使用新的集合中的ip信息时才去检测ip是否是有效的
+			if(NetUtil.isValidProxyIp(ipBean)) {
+				// 将有效的ipBean加入到有效集合中去
+				Constance.oldProxyIpBeanList.add(ipBean);
+				// 再移除掉新的ip集合中的数据
+				Constance.newProxyIpBeanList.remove(ipBean);
+				// TODO 从数据库中获取手机设备信息
+//				this.deviceInfo = 
+			}else {
+				// 如果是无效的  则再初始化一次，获取ipBean和DeviceInfo
+				init();
+			}
+		}else {
+			// 使用的是有效集合中的数据
+			
+		}
+		
+	}
 
 	@Override
 	public void run() {
+		while(true) {
+			
+			// 获取ipBean信息
+			if(isUseNew) {
+				// 使用新的代理ip集合中的数据
+				if(Constance.newProxyIpBeanList.isEmpty()) {
+					// 如果集合中为空，则表明新的ip已经用完
+					// 则从芝麻获取一批新的代理ip数据
+					Tools.getProxyIpList();
+					if(Constance.newProxyIpBeanList.isEmpty()) {
+						// 从芝麻后台获取不到ip信息了
+						// 重新再走一遍流程
+						continue;
+					}
+				}
+				this.ipBean = Constance.newProxyIpBeanList.getFirst();
+				if(this.ipBean == null) {
+					continue;
+				}
+			}else {
+				// 使用的是旧的有效的ip集合里的数据
+				if(Constance.oldProxyIpBeanList.isEmpty()) {
+					// 旧的集合中没有数据了,使用完了
+					isUseNew = true;
+					continue;
+				}else {
+					this.ipBean = Constance.oldProxyIpBeanList.getFirst();
+					if(this.ipBean == null) {
+						continue;
+					}
+				}
+			}
+			
+			// 检测ipBean是否有效
+			if(isUseNew) {
+				if(NetUtil.isValidProxyIp(ipBean)) {
+					// 有效的ip
+					// 添加到有效的ip集合中去
+					Constance.oldProxyIpBeanList.add(ipBean);
+					Constance.ipDeviceInfoMap.put(ipBean.ip, deviceInfo);
+					// 移除新的ip集合中的数据
+					Constance.newProxyIpBeanList.remove(ipBean);
+				}else {
+					// 无效的ip
+					ipBean = null;
+					continue;
+				}
+			}else {
+				// 是从旧的ip信息集合中
+				if(Constance.oldProxyIpBeanList.isEmpty()) {
+					isUseNew = true;
+					continue;
+				}
+			}
+			
+			
+			
+			// 获取deviceInfo
+			if(isUseNew) {
+				// 从新的ip集合中获取数据
+				// TODO 在这里从数据库中获取设备信息
+//				this.deviceInfo = 
+				if(this.deviceInfo == null) {
+					ipBean = null;
+					continue;
+				}
+			}else {
+				// 从旧的ip集合中获取数据
+				this.deviceInfo = Constance.ipDeviceInfoMap.get(ipBean.ip);
+				if(deviceInfo == null) {
+					ipBean = null;
+					continue;
+				}
+			}
+			
+			
+			
+			
+			
+			// 所有的逻辑都处理完成之后
+			if(isUseNew) {
+				if(Constance.newProxyIpBeanList.isEmpty() && Constance.oldProxyIpBeanList.size() > 1000) {
+					// 设置从旧的ip信息集合中获取数据
+					isUseNew = false;
+				}
+			}else {
+				Constance.oldProxyIpBeanList.remove(ipBean);
+				Constance.ipDeviceInfoMap.remove(ipBean.ip);
+			}
+			
+			// 将数据置空
+			this.ipBean = null;
+			this.deviceInfo = null;
+		}
+		
+		
 
 		if (Constance.isUseNewIp.get()) {
 			// 是用从芝麻代理获取的新的代理ip信息
 			if (!Constance.newProxyIpBeanList.isEmpty()) {
 				// 新的代理ip集合中没有了代理ip信息了
-				if (Constance.validProxyIpBeanList.size() > 1000) {
+				if (Constance.oldProxyIpBeanList.size() > 1000) {
 					// 保存的有效的代理ip已经大于了1000条 则去使用之前保存的有效的代理ip信息，有效利用代理ip信息
 					Constance.isUseNewIp.set(false);
 				} else {
