@@ -1,7 +1,10 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -577,10 +580,9 @@ public class NetUtil {
 	}
 
 	/**
-	 * 请求讯飞 获取广告数据
+	 * 获取讯飞广告数据
 	 */
-	public static void requestKDXFAdInfos(DeviceInfo deviceInfo, ProxyIpBean ipBean, String adUnitId, int showAdWidth,
-			int showAdHeight, boolean isBoot, String appId, String appName, String packageName,
+	public static void requestKDXFAdInfos(DeviceInfo deviceInfo, ProxyIpBean ipBean,int[] showAdWidthAndHeight, String adUnitId,boolean isBoot, String appId, String appName, String packageName,
 			OnLoadAdListener listener) {
 
 		HttpURLConnection urlConnection = null;
@@ -596,9 +598,9 @@ public class NetUtil {
 			// 是否支持deepLink
 			// requestBodyJson.put("is_support_deeplink",0);
 			// 广告位宽度
-			requestBodyJson.put("adw", showAdWidth);
+			requestBodyJson.put("adw", showAdWidthAndHeight[0]);
 			// 广告位高度
-			requestBodyJson.put("adh", showAdHeight);
+			requestBodyJson.put("adh", showAdWidthAndHeight[1]);
 
 			// 是否支持deepLink 0=不支持，1=支持
 			requestBodyJson.put("is_support_deeplink", 1);
@@ -698,7 +700,7 @@ public class NetUtil {
 					JSONObject resultObject = new JSONObject(result);
 					if (resultObject.getInt("rc") == 70200) {
 						// 请求广告成功、下发广告成功
-						listener.onLoadSuccess(resultObject, showAdWidth, showAdHeight);
+						listener.onLoadSuccess(resultObject, showAdWidthAndHeight);
 					} else {
 						// 连接到服务器成功，但出现一些错误，下发广告失败
 						listener.onLoadFailed(result);
@@ -733,5 +735,79 @@ public class NetUtil {
 		}
 		// return result;
 	}
+	
+	
+    
+    /** 
+     * 从网络Url中下载文件 
+     * @param urlStr 
+     * @param fileName 
+     * @param savePath 
+     * @throws IOException 
+     */  
+    public static void  downLoadFromUrl(String urlStr,String fileName,String savePath) throws IOException{  
+        URL url = new URL(urlStr);    
+        
+//        Properties prop = System.getProperties();
+//		System.getProperties().put("proxySet", "true");
+//		// 设置http访问要使用的代理服务器的地址
+//		prop.setProperty("http.proxyHost", ipBean.ip);
+//		// 设置http访问要使用的代理服务器的端口
+//		prop.setProperty("http.proxyPort", ipBean.port + "");
+		
+		
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();    
+        
+//        String authentication = "15118042006:lljaifeifei0816"; // 用户名密码
+//		String encodedLogin = new BASE64Encoder().encode(authentication.getBytes()); // 编码
+//		conn.setRequestProperty("Proxy-Authorization", " Basic " + encodedLogin);
+		
+                //设置超时间为3秒  
+        conn.setConnectTimeout(3*1000);  
+//        //防止屏蔽程序抓取而返回403错误  
+//        conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");  
+  
+        //得到输入流  
+        InputStream inputStream = conn.getInputStream();    
+        //获取自己数组  
+        byte[] getData = readInputStream(inputStream);      
+  
+        //文件保存位置  
+        File saveDir = new File(savePath);  
+        if(!saveDir.exists()){  
+            saveDir.mkdir();  
+        }  
+        File file = new File(saveDir+File.separator+fileName);      
+        FileOutputStream fos = new FileOutputStream(file);       
+        fos.write(getData);   
+        if(fos!=null){  
+            fos.close();    
+        }  
+        if(inputStream!=null){  
+            inputStream.close();  
+        }  
+  
+  
+        System.out.println("info:"+url+" download success");   
+  
+    }  
+    
+    /** 
+     * 从输入流中获取字节数组 
+     * @param inputStream 
+     * @return 
+     * @throws IOException 
+     */  
+    public static  byte[] readInputStream(InputStream inputStream) throws IOException {    
+        byte[] buffer = new byte[1024];    
+        int len = 0;    
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();    
+        while((len = inputStream.read(buffer)) != -1) {    
+            bos.write(buffer, 0, len);    
+        }    
+        bos.close();    
+        return bos.toByteArray();    
+    } 
+  
 
 }

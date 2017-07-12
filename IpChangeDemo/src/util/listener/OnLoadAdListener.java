@@ -11,7 +11,7 @@ public interface OnLoadAdListener {
 	/**
      * 加载成功(异步方法)
      */
-    void onLoadSuccess(JSONObject resultObject,int adWidth,int adHeight);
+    void onLoadSuccess(JSONObject resultObject,int[] showAdWidthAndHeight);
 
     /**
      * 加载失败(异步方法)

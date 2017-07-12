@@ -73,6 +73,18 @@ public class ListHelper<E> {
 			list.remove(e);
 		}
 	}
+	
+	public void removeFirst() {
+		synchronized (list) {
+			list.removeFirst();
+		}
+	}
+	
+	public void removeLast() {
+		synchronized (list) {
+			list.removeLast();
+		}
+	}
 
 	public void clear() {
 		synchronized (list) {
