@@ -162,12 +162,14 @@ public class AdTask implements Runnable {
 			
 			
 			// deviceInfo为空  就重新来，进入下一次循环
-			if(deviceInfo == null) {
+			if(this.deviceInfo == null) {
+				this.ipBean = null;
 				continue;
 			}
 			
 			
 			for (int i = 0; i < adUnitIds.length; i++) {
+				// 请求科大讯飞数据
 				NetUtil.requestKDXFAdInfos(deviceInfo, ipBean, Constance.TTGY_AD_WIDTHS_HEIGHT[i], adUnitIds[i], i == 0 ? true:false, appId, appName, packageName, new OnLoadAdListener() {
 					
 					@Override

@@ -13,9 +13,10 @@ public class Tools {
 	 * 获取更多芝麻代理ip信息
 	 */
 	public static List<ProxyIpBean> getProxyIpList() {
-		String result = NetUtil.sendPost("http://http.dztwo.com/getip?",
-				"num=10&type=2&pro=&city=0&yys=0&port=1&time=1");
+		String result = NetUtil.sendPost("http://http.zhimadaili.com/getip?",
+				"num=10&type=2&pro=&yys=0&port=1&time=1");
 		List<ProxyIpBean> ipBeans = ParseUtil.parseIpBeans(result);
+		System.out.println("获取到代理ip的条数---->>"+ipBeans.size());
 //		Constance.newProxyIpBeanList.clear();
 		
 		return ipBeans;

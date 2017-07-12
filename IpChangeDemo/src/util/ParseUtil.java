@@ -19,6 +19,7 @@ public class ParseUtil {
 	public static List<ProxyIpBean> parseIpBeans(String result){
 		List<ProxyIpBean> list = new ArrayList<>();
 		try {
+			System.out.println("parseIpBeans result---->>>"+result);
 			JSONObject jsonObject = new JSONObject(result);
 			int code = jsonObject.getInt("code");
 			if(code == 0){
