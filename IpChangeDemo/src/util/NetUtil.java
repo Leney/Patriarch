@@ -19,8 +19,11 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.GZIPInputStream;
 
 import org.json.JSONObject;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import bean.DeviceInfo;
 import bean.ProxyIpBean;
@@ -605,7 +608,7 @@ public class NetUtil {
 			// 是否支持deepLink 0=不支持，1=支持
 			requestBodyJson.put("is_support_deeplink", 1);
 			// 设备类型 -1=未知，0=phone,1=pad,2=pc,3=tv, 4=wap
-			requestBodyJson.put("devicetype", 0);
+			requestBodyJson.put("devicetype", deviceInfo.deviceType);
 			// 操作系统类型
 			requestBodyJson.put("os", "Android");
 			// 操作系统版本号
@@ -665,6 +668,9 @@ public class NetUtil {
 			// 连接,也可以不用明文connect，使用下面的httpConn.get
 			// 设置讯飞需要添加的header
 			urlConnection.setRequestProperty("X-protocol-ver", "2.0");
+			urlConnection.setRequestProperty("Accept-Encoding", "gzip");
+			urlConnection.setRequestProperty("Accept-Charset", "utf-8");
+			urlConnection.setRequestProperty("Content-Type", "text/html; charset=utf-8");  
 
 			// 设置参数
 			urlConnection.setDoOutput(true); // 需要输出
@@ -689,9 +695,14 @@ public class NetUtil {
 				// 讯飞有数据返回
 				StringBuffer sb = new StringBuffer();
 				String readLine = new String();
-				reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+				GZIPInputStream gis =new GZIPInputStream(urlConnection.getInputStream());
+				
+				
+//				reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+				reader = new BufferedReader(new InputStreamReader(gis,"utf-8"));
 				while ((readLine = reader.readLine()) != null) {
 					sb.append(readLine).append("\n");
+//					System.out.println("utf-8--->>>"+new String(readLine.getBytes(),"utf-8"));
 				}
 				reader.close();
 				result = sb.toString();

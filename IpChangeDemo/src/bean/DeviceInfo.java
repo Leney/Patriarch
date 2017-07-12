@@ -1,5 +1,7 @@
 package bean;
 
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 /**
  * 手机设备信息实体类
  * @author dell
@@ -37,4 +39,10 @@ public class DeviceInfo {
     public int orientation;
     /** 使用语言  zh-CN*/
     public String language;
+    /**
+     * 设备类型
+     * 1=未知 ，0=phone， 1=pad ，2=pc ，3=tv ，4=wap
+     */
+    public int deviceType;
+    
 }

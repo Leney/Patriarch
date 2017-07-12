@@ -132,7 +132,7 @@ public class AdTask implements Runnable {
 			if(this.ipBean == null) {
 				continue;
 			}
-			
+//			&vendor=&dvw=480&devicetype=4&osv=4.1.2
 			
 			// 检测ipBean是否有效
 			if(isUseNew) {
@@ -141,8 +141,22 @@ public class AdTask implements Runnable {
 					System.out.println("有效ip---->>"+ipBean.ip);
 					
 					//TODO 从数据库中获取手机设备信息
-//					this.deviceInfo = 
-					
+					this.deviceInfo = new DeviceInfo();
+					deviceInfo.androidId = "114826349dd17ab0";
+					deviceInfo.imei = "863288034320306";
+					deviceInfo.mac = "00:71:f3:47:3c:ad";
+					deviceInfo.userAgent = "Mozilla/5.0%20(Linux;%20U;%20Android%204.2.2;%20zh-CN;%20U59GT-C4B%20Build/JDQ39)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Version/4.0%20Chrome/40.0.2214.89%20UCBrowser/11.4.9.941%20Mobile%20Safari/537.36";
+					deviceInfo.model = "meetuu%20G7";
+					deviceInfo.language = "zh-CN";
+					deviceInfo.deviceType = 0;
+					deviceInfo.osVersion = "4.1";
+					deviceInfo.density = "2.0";
+					deviceInfo.operator = "46000";
+					deviceInfo.net = 2;
+					deviceInfo.deviceScreenWidth = 1080;
+					deviceInfo.deviceScreenHeight = 1920;
+					deviceInfo.orientation = 0;
+					deviceInfo.vendor = "HuaWei";
 					
 				}else {
 					// 无效的ip
@@ -230,9 +244,11 @@ public class AdTask implements Runnable {
 	private void disposeGetAdSuccess(JSONObject resultObject,int[] showAdWidthAndHeight) {
 		// 广告请求成功
 		AdInfo adInfo = ParseUtil.getAdInfo(resultObject);
+		System.out.println("adInfo == null------>>>"+(adInfo == null));
 			if (adInfo == null) {
 				return;
 			}
+			System.out.println("开始展示上报");
 			// 上报展示数据成功 请求上报链接
 			NetUtil.requestUrlsByProxy(ipBean,adInfo.getImprUrls());
 			// 设置百分之6的点击率
