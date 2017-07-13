@@ -12,7 +12,7 @@ import bean.ProxyIpBean;
 public class ParseUtil {
 	
 	/**
-	 * 解析代理ip信息
+	 * 解析芝麻代理ip信息
 	 * @param result
 	 * @return
 	 */
@@ -33,6 +33,35 @@ public class ParseUtil {
 					ipBean.expire_time_str = ipObject.getString("expire_time");
 					ipBean.city = ipObject.getString("city");
 					ipBean.isp = ipObject.getString("isp");
+					list.add(ipBean);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	/**
+	 * 解析讯代理ip信息
+	 * @param result
+	 * @return
+	 */
+	public static List<ProxyIpBean> parseIpBeansFromXun(String result){
+		List<ProxyIpBean> list = new ArrayList<>();
+		try {
+			System.out.println("parseIpBeans result---->>>"+result);
+			JSONObject jsonObject = new JSONObject(result);
+			int code = jsonObject.getInt("ERRORCODE");
+			if(code == 0){
+				JSONArray jsonArray = jsonObject.getJSONArray("RESULT");
+				int length = jsonArray.length();
+				for (int i = 0; i < length; i++) {
+					JSONObject ipObject = jsonArray.getJSONObject(i);
+					ProxyIpBean ipBean = new ProxyIpBean();
+					ipBean.ip = ipObject.getString("ip");
+					ipBean.port = ipObject.getInt("port");
 					list.add(ipBean);
 				}
 			}
