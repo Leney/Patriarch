@@ -152,24 +152,26 @@ public class AdTask implements Runnable {
 					// 有效的ip
 					System.out.println("此ip有效---->>"+ipBean.ip);
 					
-					//TODO 从数据库中获取手机设备信息
-					this.deviceInfo = new DeviceInfo();
-					deviceInfo.androidId = "114826349dd17ab0";
-					deviceInfo.imei = "863288034320306";
-					deviceInfo.mac = "00:71:f3:47:3c:ad";
-					deviceInfo.userAgent = "Mozilla/5.0%20(Linux;%20U;%20Android%204.2.2;%20zh-CN;%20U59GT-C4B%20Build/JDQ39)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Version/4.0%20Chrome/40.0.2214.89%20UCBrowser/11.4.9.941%20Mobile%20Safari/537.36";
-					deviceInfo.model = "meetuu%20G7";
-					deviceInfo.language = "zh-CN";
-					deviceInfo.deviceType = 0;
-					deviceInfo.osVersion = "4.1";
-					deviceInfo.density = "2.0";
-					deviceInfo.operator = "46000";
-					deviceInfo.net = 2;
-					deviceInfo.deviceScreenWidth = 1080;
-					deviceInfo.deviceScreenHeight = 1920;
-					deviceInfo.orientation = 0;
-					deviceInfo.vendor = "HuaWei";
+					//从数据库中获取手机设备信息
+//					this.deviceInfo = new DeviceInfo();
+//					deviceInfo.androidId = "114826349dd17ab0";
+//					deviceInfo.imei = "863288034320306";
+//					deviceInfo.mac = "00:71:f3:47:3c:ad";
+//					deviceInfo.userAgent = "Mozilla/5.0%20(Linux;%20U;%20Android%204.2.2;%20zh-CN;%20U59GT-C4B%20Build/JDQ39)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Version/4.0%20Chrome/40.0.2214.89%20UCBrowser/11.4.9.941%20Mobile%20Safari/537.36";
+//					deviceInfo.model = "meetuu%20G7";
+//					deviceInfo.language = "zh-CN";
+//					deviceInfo.deviceType = 0;
+//					deviceInfo.osVersion = "4.1";
+//					deviceInfo.density = "2.0";
+//					deviceInfo.operator = "46000";
+//					deviceInfo.net = 2;
+//					deviceInfo.deviceScreenWidth = 1080;
+//					deviceInfo.deviceScreenHeight = 1920;
+//					deviceInfo.orientation = 0;
+//					deviceInfo.vendor = "HuaWei";
 					
+					this.deviceInfo = Tools.getDeviceInfoByRamdon();
+					System.out.println("随机从数据库中获取到的设备信息  deviceInfo.imei------------->>>"+deviceInfo.imei);
 				}else {
 					// 无效的ip
 					System.out.println("此ip无效---->>"+ipBean.ip);
@@ -246,6 +248,7 @@ public class AdTask implements Runnable {
 			
 			// 判断下一次循环需使用哪个集合中的数据(新的还是旧的)
 			if(isUseNew) {
+				System.out.println("旧的集合中的条数-----------》》》"+oldProxyIpBeanList.size());
 				if(newProxyIpBeanList.isEmpty() && oldProxyIpBeanList.size() >= 5) {
 					// 设置从旧的ip信息集合中获取数据
 					isUseNew = false;

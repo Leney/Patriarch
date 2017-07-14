@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 import bean.AdInfo;
+import bean.DeviceInfo;
 import bean.ProxyIpBean;
+import manager.Constance;
+import manager.db.DeviceDBManager;
 
 public class Tools {
 
@@ -137,6 +140,79 @@ public class Tools {
         url = url.replace("IT_CLK_PNT_UP_X", String.valueOf(upX));
         url = url.replace("IT_CLK_PNT_UP_Y", String.valueOf(upY));
         return url;
+    }
+    
+    /**
+     * 获取数值之间的随机数
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public static int randomMinMax(int min, int max) {
+        if (min >= max) {
+            return min;
+        }
+        Random random = new Random();
+        return random.nextInt(max) % (max - min + 1) + min;
+    }
+    
+    
+    /**
+     * 模拟Mac地址
+     *
+     * @return
+     */
+    public static String simulationMac() {
+        char[] char1 = "abcdef".toCharArray();
+        char[] char2 = "0123456789".toCharArray();
+        StringBuffer mBuffer = new StringBuffer();
+        for (int i = 0; i < 6; i++) {
+            int t = new java.util.Random().nextInt(char1.length);
+            int y = new java.util.Random().nextInt(char2.length);
+            int key = new java.util.Random().nextInt(2);
+            if (key == 0) {
+                mBuffer.append(char2[y]).append(char1[t]);
+            } else {
+                mBuffer.append(char1[t]).append(char2[y]);
+            }
+
+            if (i != 5) {
+                mBuffer.append(":");
+            }
+        }
+        return mBuffer.toString();
+    }
+    
+    /**
+     * 随机从数据库中获取数据
+     * @return
+     */
+    public static DeviceInfo getDeviceInfoByRamdon(){
+    	int id = randomMinMax(1, Constance.DB_TOTAL_DATA_COUNT);
+    	DeviceInfo deviceInfo = DeviceDBManager.getInstance().queryDeviceInfo(id);
+    	if(deviceInfo != null){
+    		// 查询到数据了
+    		deviceInfo.mac = simulationMac();
+    		deviceInfo.osVersion = Constance.OS_VERSIONS[Tools.randomMinMax(0, Constance.OS_VERSIONS.length - 1)];
+    		deviceInfo.userAgent = Constance.USER_AGENTS[Tools.randomMinMax(0, Constance.USER_AGENTS.length - 1)].replace("OS_VERSION", deviceInfo.osVersion);
+    		
+    		deviceInfo.language = "zh-CN";
+    		deviceInfo.deviceType = 0;
+    		deviceInfo.density = Constance.DENSITY[Tools.randomMinMax(0, Constance.DENSITY.length - 1)];
+    		// 随机获取 运营商编号
+            deviceInfo.operator = Constance.OPERATORS[Tools.randomMinMax(0, Constance.OPERATORS.length - 1)];
+            deviceInfo.net = 2;
+            int[] screen_ressolution = Constance.SCREEN_RESSOLUTION[Tools.randomMinMax(0, Constance.SCREEN_RESSOLUTION.length - 1)];
+            deviceInfo.deviceScreenWidth = screen_ressolution[0];
+            deviceInfo.deviceScreenHeight = screen_ressolution[1];
+            deviceInfo.orientation = 0;
+            
+            // TODO model 和 vendor的值需要处理
+    		deviceInfo.model = "meetuu%20G7";
+            deviceInfo.vendor = "HuaWei";
+    	}
+    	return deviceInfo;
     }
 
 }
