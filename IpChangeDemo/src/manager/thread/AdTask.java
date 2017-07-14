@@ -78,6 +78,9 @@ public class AdTask implements Runnable {
 	
 	/** ip使用过一次之后，上一次请求讯飞时所对应的设备信息集合(主要是为了增加pv/uv值,当再次使用某个ip请求讯飞时,保证和上次请求讯飞的设备信息保持一致)*/
 	public static Map<String, DeviceInfo> ipDeviceInfoMap = new Hashtable<>();
+	
+	/** 统计请求讯飞的次数*/
+	private int time;
 
 	public AdTask(String[] adUnitIds, String appId, String appName, String packageName,int threadNum) {
 		// this.deviceInfo = deviceInfo;
@@ -207,6 +210,8 @@ public class AdTask implements Runnable {
 			
 			for (int i = 0; i < adUnitIds.length; i++) {
 				// 请求科大讯飞数据
+				time ++;
+				System.out.println("当前请求的讯飞的总次数----->>>"+time);
 				NetUtil.requestKDXFAdInfos(deviceInfo, ipBean, Constance.TTGY_AD_WIDTHS_HEIGHT[i], adUnitIds[i], i == 0 ? true:false, appId, appName, packageName, new OnLoadAdListener() {
 					
 					@Override

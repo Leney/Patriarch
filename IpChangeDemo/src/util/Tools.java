@@ -19,7 +19,7 @@ public class Tools {
 //		List<ProxyIpBean> ipBeans = ParseUtil.parseIpBeans(result);
 		
 		// 讯代理
-		String result = NetUtil.sendGet("http://www.xdaili.cn/ipagent/privateProxy/applyStaticProxy?",
+		String result = NetUtil.sendGet("http://www.xdaili.cn/ipagent/privateProxy/applyStaticProxy",
 				"count=1&spiderId=4fb3cc493e0340e98804629db8f4f0bd&returnType=2");
 		List<ProxyIpBean> ipBeans = ParseUtil.parseIpBeansFromXun(result);
 		System.out.println("获取到代理ip的条数---->>"+ipBeans.size());
