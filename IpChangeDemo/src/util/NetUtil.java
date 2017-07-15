@@ -491,14 +491,18 @@ public class NetUtil {
 
 			urlConnection = (HttpURLConnection) url.openConnection();
 
-			// String authentication = "15118042006:lljaifeifei0816"; // 用户名密码
-			// String encodedLogin = new
-			// BASE64Encoder().encode(authentication.getBytes()); // 编码
-			// urlConnection.setRequestProperty("Proxy-Authorization", " Basic "
-			// + encodedLogin);
+			 String authentication = "15118042006:lljaifeifei0816"; // 用户名密码
+			 String encodedLogin = new
+			 BASE64Encoder().encode(authentication.getBytes()); // 编码
+			 urlConnection.setRequestProperty("Proxy-Authorization", " Basic "
+			 + encodedLogin);
 
 			urlConnection.setDoInput(true);
 
+			urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			urlConnection.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
+			urlConnection.setRequestProperty("Charset", "UTF-8");
+			
 			urlConnection.setConnectTimeout(10000);
 			urlConnection.setReadTimeout(10000);
 			urlConnection.setRequestMethod("POST");

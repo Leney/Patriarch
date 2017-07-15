@@ -1,5 +1,9 @@
 package manager;
 
+import java.io.File;
+
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 /**
  * 常量类
  * 
@@ -27,6 +31,9 @@ public class Constance {
 
 	/** 当前数据库的总条数 */
 	public static int DB_TOTAL_DATA_COUNT = 0;
+	
+	/** 设备数据库文件的路径*/
+	public static String dbUrl = System.getProperty("user.dir") + File.separator + "db"+ File.separator+"50wan.db";
 
 	// /** 当前设备的真正ip地址(用来判断是否设置代理成功的条件之一，因为有时设置代理不成功，获取当前ip会返回本机ip) */
 	// public static String CUR_IP_ADDRESS = "";

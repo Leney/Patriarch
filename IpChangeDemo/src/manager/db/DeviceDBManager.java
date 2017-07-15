@@ -1,12 +1,12 @@
 package manager.db;
 
-import java.awt.Cursor;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 import bean.DeviceInfo;
+import manager.Constance;
 
 public class DeviceDBManager {
 	private static volatile DeviceDBManager instance = null;
@@ -31,7 +31,8 @@ public class DeviceDBManager {
 		int count = 0;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:E:\\db\\50wan.db"); // filename为sqlite数据库文件名，最好带上绝对路径
+//			Connection conn = DriverManager.getConnection("jdbc:sqlite:E:\\db\\50wan.db"); // filename为sqlite数据库文件名，最好带上绝对路径
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:"+Constance.dbUrl+""); // filename为sqlite数据库文件名，最好带上绝对路径
 
 			String queryAllSql = "Select count(_id) from device_tab;";
 			// String sql = "insert into tb_users values('张三','111','男','25')";
@@ -57,7 +58,7 @@ public class DeviceDBManager {
 		DeviceInfo deviceInfo = new DeviceInfo();
 		try {
 			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:E:\\db\\50wan.db"); // filename为sqlite数据库文件名，最好带上绝对路径
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:"+Constance.dbUrl+""); // filename为sqlite数据库文件名，最好带上绝对路径
 
 			String querySql = "Select * from device_tab where _id = " + id + ";";
 			// String sql = "insert into tb_users values('张三','111','男','25')";
