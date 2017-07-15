@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -41,12 +43,12 @@ public class NetUtil {
 			String urlNameString = url + "?" + param;
 			URL realUrl = new URL(urlNameString);
 
-			// 取消代理
-			Properties prop = System.getProperties();
-			prop.remove("http.proxyHost");
-			prop.remove("http.proxyPort");
-			prop.remove("https.proxyHost");
-			prop.remove("https.proxyPort");
+//			// 取消代理
+//			Properties prop = System.getProperties();
+//			prop.remove("http.proxyHost");
+//			prop.remove("http.proxyPort");
+//			prop.remove("https.proxyHost");
+//			prop.remove("https.proxyPort");
 
 			// 打开和URL之间的连接
 			URLConnection connection = realUrl.openConnection();
@@ -100,12 +102,13 @@ public class NetUtil {
 		String result = "";
 		try {
 			URL realUrl = new URL(url);
-			// 取消代理
-			Properties prop = System.getProperties();
-			prop.remove("http.proxyHost");
-			prop.remove("http.proxyPort");
-			prop.remove("https.proxyHost");
-			prop.remove("https.proxyPort");
+//			// 取消代理
+//			Properties prop = System.getProperties();
+//			prop.remove("http.proxyHost");
+//			prop.remove("http.proxyPort");
+//			prop.remove("https.proxyHost");
+//			prop.remove("https.proxyPort");
+			
 			// System.getProperties().put("proxySet", "true");
 			// // 设置http访问要使用的代理服务器的地址
 			// prop.setProperty("http.proxyHost", ipBean.ip);
@@ -482,14 +485,17 @@ public class NetUtil {
 		BufferedReader reader = null;
 		try {
 			URL url = new URL("http://xd.livevvv.com/kdxf/ip");
-			Properties prop = System.getProperties();
-			System.getProperties().put("proxySet", "true");
-			// 设置http访问要使用的代理服务器的地址
-			prop.setProperty("http.proxyHost", ipBean.ip);
-			// 设置http访问要使用的代理服务器的端口
-			prop.setProperty("http.proxyPort", ipBean.port + "");
+//			Properties prop = System.getProperties();
+//			System.getProperties().put("proxySet", "true");
+//			// 设置http访问要使用的代理服务器的地址
+//			prop.setProperty("http.proxyHost", ipBean.ip);
+//			// 设置http访问要使用的代理服务器的端口
+//			prop.setProperty("http.proxyPort", ipBean.port + "");
+			
+			InetSocketAddress addr = new InetSocketAddress(ipBean.ip,ipBean.port);            
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
 
-			urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection = (HttpURLConnection) url.openConnection(proxy);
 
 			 String authentication = "15118042006:lljaifeifei0816"; // 用户名密码
 			 String encodedLogin = new
@@ -559,14 +565,17 @@ public class NetUtil {
 		System.out.println("上报链接---->>>" + reportUrl);
 		try {
 			URL url = new URL(reportUrl);
-			Properties prop = System.getProperties();
-			System.getProperties().put("proxySet", "true");
-			// 设置http访问要使用的代理服务器的地址
-			prop.setProperty("http.proxyHost", ipBean.ip);
-			// 设置http访问要使用的代理服务器的端口
-			prop.setProperty("http.proxyPort", ipBean.port + "");
+//			Properties prop = System.getProperties();
+//			System.getProperties().put("proxySet", "true");
+//			// 设置http访问要使用的代理服务器的地址
+//			prop.setProperty("http.proxyHost", ipBean.ip);
+//			// 设置http访问要使用的代理服务器的端口
+//			prop.setProperty("http.proxyPort", ipBean.port + "");
+			
+			InetSocketAddress addr = new InetSocketAddress(ipBean.ip,ipBean.port);            
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
 
-			urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection = (HttpURLConnection) url.openConnection(proxy);
 
 			String authentication = "15118042006:lljaifeifei0816"; // 用户名密码
 			String encodedLogin = new BASE64Encoder().encode(authentication.getBytes()); // 编码
@@ -689,14 +698,17 @@ public class NetUtil {
 
 			URL url = new URL("http://ws.voiceads.cn/ad/request");
 
-			Properties prop = System.getProperties();
-			System.getProperties().put("proxySet", "true");
-			// 设置http访问要使用的代理服务器的地址
-			prop.setProperty("http.proxyHost", ipBean.ip);
-			// 设置http访问要使用的代理服务器的端口
-			prop.setProperty("http.proxyPort", ipBean.port + "");
+//			Properties prop = System.getProperties();
+//			System.getProperties().put("proxySet", "true");
+//			// 设置http访问要使用的代理服务器的地址
+//			prop.setProperty("http.proxyHost", ipBean.ip);
+//			// 设置http访问要使用的代理服务器的端口
+//			prop.setProperty("http.proxyPort", ipBean.port + "");
+			
+			InetSocketAddress addr = new InetSocketAddress(ipBean.ip,ipBean.port);            
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
 
-			urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection = (HttpURLConnection) url.openConnection(proxy);
 
 			String authentication = "15118042006:lljaifeifei0816"; // 用户名密码
 			String encodedLogin = new BASE64Encoder().encode(authentication.getBytes()); // 编码
@@ -805,12 +817,12 @@ public class NetUtil {
 		// // 设置http访问要使用的代理服务器的端口
 		// prop.setProperty("http.proxyPort", ipBean.port + "");
 
-		// 取消代理
-		Properties prop = System.getProperties();
-		prop.remove("http.proxyHost");
-		prop.remove("http.proxyPort");
-		prop.remove("https.proxyHost");
-		prop.remove("https.proxyPort");
+//		// 取消代理
+//		Properties prop = System.getProperties();
+//		prop.remove("http.proxyHost");
+//		prop.remove("http.proxyPort");
+//		prop.remove("https.proxyHost");
+//		prop.remove("https.proxyPort");
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
