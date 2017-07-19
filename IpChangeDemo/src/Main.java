@@ -2,6 +2,7 @@ import manager.Constance;
 import manager.db.DeviceDBManager;
 import manager.thread.AdTask;
 import manager.thread.ThreadPoolManager;
+import util.Tools;
 
 public class Main {
 
@@ -73,8 +74,8 @@ public class Main {
 
 		AdTask adTask1 = new AdTask(Constance.TTGY_AD_UNIT_IDS, Constance.KDXF_APP_ID, Constance.KDXF_APP_NAME,
 				Constance.KDXF_APP_PACKAGE_NAME, 1);
-		AdTask adTask2 = new AdTask(Constance.TTGY_AD_UNIT_IDS, Constance.KDXF_APP_ID, Constance.KDXF_APP_NAME,
-				Constance.KDXF_APP_PACKAGE_NAME, 2);
+//		AdTask adTask2 = new AdTask(Constance.TTGY_AD_UNIT_IDS, Constance.KDXF_APP_ID, Constance.KDXF_APP_NAME,
+//				Constance.KDXF_APP_PACKAGE_NAME, 2);
 		// AdTask adTask3 = new AdTask(Constance.TTGY_AD_UNIT_IDS,
 		// Constance.KDXF_APP_ID, Constance.KDXF_APP_NAME,
 		// Constance.KDXF_APP_PACKAGE_NAME, 3);
@@ -110,6 +111,7 @@ public class Main {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
+		
 	}
 	
 	

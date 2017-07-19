@@ -71,6 +71,37 @@ public class ParseUtil {
 		return list;
 	}
 	
+	
+	/**
+	 * 解析ip精灵ip信息
+	 * @param result
+	 * @return
+	 */
+	public static List<ProxyIpBean> parseIpBeansFromIpJL(String result){
+		List<ProxyIpBean> list = new ArrayList<>();
+		try {
+			System.out.println("parseIpBeans result---->>>"+result);
+			JSONObject dataObject = new JSONObject(result);
+			JSONObject dataObject2 = dataObject.getJSONObject("data");
+			int code = dataObject2.getInt("code");
+			if(code == 0){
+				JSONObject jsonObject = dataObject2.getJSONObject("list");
+				JSONArray jsonArray = jsonObject.getJSONArray("ProxyIpInfoList");
+				int length = jsonArray.length();
+				for (int i = 0; i < length; i++) {
+					JSONObject ipObject = jsonArray.getJSONObject(i);
+					ProxyIpBean ipBean = new ProxyIpBean();
+					ipBean.ip = ipObject.getString("IP");
+					ipBean.port = ipObject.getInt("Port");
+					list.add(ipBean);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	/**
      * 获取科大讯飞广告数据
      * @param resultObject
